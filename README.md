@@ -1,47 +1,37 @@
-# A Neovim Plugin Template
+<h1 align="center">Witt - What Is The Type in Neovim</h1>
+<div align="center">
+<img src="imgs/main.png"/>
+</div>
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ellisonleao/nvim-plugin-template/lint-test.yml?branch=main&style=for-the-badge)
-![Lua](https://img.shields.io/badge/Made%20with%20Lua-blueviolet.svg?style=for-the-badge&logo=lua)
+## Installation
 
-A template repository for Neovim plugins.
+### Using [Lazy.nvim](https://github.com/folke/lazy.nvim)
 
-## Using it
+Add the following to your Neovim configuration:
 
-Via `gh`:
-
-```
-$ gh repo create my-plugin -p ellisonleao/nvim-plugin-template
-```
-
-Via github web page:
-
-Click on `Use this template`
-
-![](https://docs.github.com/assets/cb-36544/images/help/repository/use-this-template-button.png)
-
-## Features and structure
-
-- 100% Lua
-- Github actions for:
-  - running tests using [plenary.nvim](https://github.com/nvim-lua/plenary.nvim) and [busted](https://olivinelabs.com/busted/)
-  - check for formatting errors (Stylua)
-  - vimdocs autogeneration from README.md file
-  - luarocks release (LUAROCKS_API_KEY secret configuration required)
-
-### Plugin structure
+```lua
+    {
+        "typed-rocks/witt-neovim",
+        config = function()
+            require("witt")
+        end
+    },
 
 ```
-.
-├── lua
-│   ├── plugin_name
-│   │   └── module.lua
-│   └── plugin_name.lua
-├── Makefile
-├── plugin
-│   └── plugin_name.lua
-├── README.md
-├── tests
-│   ├── minimal_init.lua
-│   └── plugin_name
-│       └── plugin_name_spec.lua
+## Usage
+Use it like you would in a typescript-playground. Just add a comment on the line below your type and point it to your type:
+
+```typescript
+
+type YourType = A | B | C;
+//    ^? 
 ```
+This will then show the result of your Type like tsserver would do it when hovering.
+### All options
+
+`Tsw rt=[bun|node|deno] show_variables=[true|false] show_order=[true|false]`
+
+### Defaults:
+
+`Tsw rt=node show_variables=false show_order=false`
+
