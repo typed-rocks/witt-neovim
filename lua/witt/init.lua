@@ -1,5 +1,8 @@
 local M = {}
 
+
+function M.setup() 
+end
 M.namespace = vim.api.nvim_create_namespace("witt")
 
 local function find_annotations()
