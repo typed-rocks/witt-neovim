@@ -51,6 +51,11 @@ function M.update_diagnostics()
 	local annotations = find_annotations()
 	local diagnostics = {}
 
+	if #annotations == 0 then
+		vim.diagnostic.set(M.namespace, bufnr, {}, { signs = false })
+		return
+	end
+
 	for _, annotation in ipairs(annotations) do
 		local params = {
 			textDocument = vim.lsp.util.make_text_document_params(),
@@ -82,7 +87,7 @@ vim.api.nvim_create_user_command(
 )
 vim.api.nvim_create_user_command("WittClear", M.clear, { desc = "Remove the Witt Annotations" })
 
-vim.api.nvim_create_autocmd({ "TextChanged" }, {
+vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
 	pattern = "*.ts,*.tsx,*.mts",
 	callback = M.update_diagnostics,
 })
