@@ -51,6 +51,11 @@ function M.update_diagnostics()
 	local annotations = find_annotations()
 	local diagnostics = {}
 
+	if #annotations == 0 then
+		vim.diagnostic.set(M.namespace, bufnr, {}, { signs = false })
+		return
+	end
+
 	for _, annotation in ipairs(annotations) do
 		local params = {
 			textDocument = vim.lsp.util.make_text_document_params(),
