@@ -87,7 +87,7 @@ vim.api.nvim_create_user_command(
 )
 vim.api.nvim_create_user_command("WittClear", M.clear, { desc = "Remove the Witt Annotations" })
 
-vim.api.nvim_create_autocmd({ "TextChanged" }, {
+vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
 	pattern = "*.ts,*.tsx,*.mts",
 	callback = M.update_diagnostics,
 })
