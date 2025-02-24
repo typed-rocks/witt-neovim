@@ -1,7 +1,7 @@
 local M = {}
 
 
-function M.setup() 
+function M.setup()
 end
 M.namespace = vim.api.nvim_create_namespace("witt")
 
@@ -86,6 +86,14 @@ vim.api.nvim_create_user_command(
 	{ desc = "Get TypeScript type above the // ^? annotation" }
 )
 vim.api.nvim_create_user_command("WittClear", M.clear, { desc = "Remove the Witt Annotations" })
+vim.api.nvim_create_user_command(
+  "WittRestart",
+  function()
+    M.clear()
+    M.update_diagnostics()
+  end,
+  { desc = "Restart the Witt Annotations" }
+)
 
 vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
 	pattern = "*.ts,*.tsx,*.mts",
