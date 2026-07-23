@@ -98,7 +98,7 @@ vim.api.nvim_create_user_command(
 )
 
 vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
-	pattern = "*.ts,*.tsx,*.mts",
+	pattern = { "*.ts", "*.tsx", "*.mts" },
 	callback = M.update_diagnostics,
 })
 
