@@ -1,9 +1,11 @@
 local M = {}
+local lsp = "tsserver"
 
-
-function M.setup()
+function M.setup(opts)
+	lsp = opts and opts.lsp or lsp
 end
 M.namespace = vim.api.nvim_create_namespace("witt")
+vim.diagnostic.config({ virtual_text = true }, M.namespace)
 
 local function find_annotations()
 	local bufnr = vim.api.nvim_get_current_buf()
@@ -50,8 +52,9 @@ function M.update_diagnostics()
 	local bufnr = vim.api.nvim_get_current_buf()
 	local annotations = find_annotations()
 	local diagnostics = {}
+	local client = vim.lsp.get_clients({ bufnr = bufnr, name = lsp })[1]
 
-	if #annotations == 0 then
+	if #annotations == 0 or not client then
 		vim.diagnostic.set(M.namespace, bufnr, {}, { signs = false })
 		return
 	end
@@ -62,7 +65,7 @@ function M.update_diagnostics()
 			position = { line = annotation.line, character = annotation.col },
 		}
 
-		vim.lsp.buf_request(bufnr, "textDocument/hover", params, function(err, result)
+		client:request("textDocument/hover", params, function(err, result)
 			if err then
 				vim.notify("Error: " .. err, vim.log.levels.ERROR)
 			else
@@ -96,14 +99,14 @@ vim.api.nvim_create_user_command(
 )
 
 vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
-	pattern = "*.ts,*.tsx,*.mts",
+	pattern = { "*.ts", "*.tsx", "*.mts" },
 	callback = M.update_diagnostics,
 })
 
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
-		if client and client.name == "tsserver" then
+		if client and client.name == lsp then
 			M.update_diagnostics()
 		end
 	end,
