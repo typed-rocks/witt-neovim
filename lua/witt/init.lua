@@ -5,6 +5,7 @@ function M.setup(opts)
 	lsp = opts and opts.lsp or lsp
 end
 M.namespace = vim.api.nvim_create_namespace("witt")
+vim.diagnostic.config({ virtual_text = true }, M.namespace)
 
 local function find_annotations()
 	local bufnr = vim.api.nvim_get_current_buf()
